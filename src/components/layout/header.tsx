@@ -13,17 +13,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/components/auth-provider';
 import Logo from './logo';
-import { LogIn, LogOut, User as UserIcon, LayoutGrid, PlusCircle } from 'lucide-react';
+import { LogIn, LogOut, User as UserIcon, LayoutGrid, PlusCircle, Sun, Moon } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useTheme } from '@/components/theme-provider';
 
 export default function Header() {
   const { user, loading, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <Logo />
-        <nav className="flex items-center space-x-4">
+        <nav className="flex items-center space-x-2 md:space-x-4">
           <Button variant="ghost" asChild>
             <Link href="/">Browse Templates</Link>
           </Button>
@@ -32,6 +34,9 @@ export default function Header() {
               <Link href="/my-invites">My Invites</Link>
             </Button>
           )}
+          <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
+            {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+          </Button>
           {loading ? (
             <Skeleton className="h-10 w-10 rounded-full" />
           ) : user ? (
