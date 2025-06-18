@@ -2,28 +2,56 @@
 // For example:
 // import { createClient } from '@supabase/supabase-js';
 
-// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-// const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { createClient } from '@supabase/supabase-js';
 
-// if (!supabaseUrl || !supabaseAnonKey) {
-//   console.warn("Supabase URL or Anon Key is not defined. Supabase features will not work.");
-// }
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-// export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// export async function uploadVideoToSupabase(file: File, path: string): Promise<string | null> {
-//   if (!supabase) return null;
-//   try {
-//     const { data, error } = await supabase.storage.from('videos').upload(path, file);
-//     if (error) throw error;
-//     const { publicURL } = supabase.storage.from('videos').getPublicUrl(data.path);
-//     return publicURL;
-//   } catch (error) {
-//     console.error('Error uploading video to Supabase:', error);
-//     return null;
-//   }
-// }
+export async function uploadFile(
+  file: File,
+  bucket: string,
+  path: string
+): Promise<{ url: string; error: Error | null }> {
+  try {
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(path, file, {
+        cacheControl: '3600',
+        upsert: true,
+      });
+
+    if (error) throw error;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(path);
+
+    return { url: publicUrl, error: null };
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    return { url: '', error: error as Error };
+  }
+}
+
+export async function deleteFile(
+  bucket: string,
+  path: string
+): Promise<{ error: Error | null }> {
+  try {
+    const { error } = await supabase.storage
+      .from(bucket)
+      .remove([path]);
+
+    if (error) throw error;
+    return { error: null };
+  } catch (error) {
+    console.error('Error deleting file:', error);
+    return { error: error as Error };
+  }
+}
 
 // For now, this is a placeholder as the full implementation of Supabase is not required for this iteration.
 // The actual rendered video URL will be simulated.
-export const supabase = null; // Placeholder
+export const supabasePlaceholder = null; // Placeholder

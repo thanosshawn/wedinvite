@@ -6,8 +6,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Remotion Invitations',
-  description: 'Create beautiful animated invitations.',
+  title: 'Wedding Invitations',
+  description: 'Create beautiful Indian wedding invitations with modern animations.',
 };
 
 export default function RootLayout({
@@ -23,12 +23,17 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased min-h-screen flex flex-col">
+      <body className="font-sans antialiased min-h-screen flex flex-col bg-background text-foreground">
         <ThemeProvider defaultTheme="light" storageKey="app-theme">
           <AuthProvider>
+            <div className="mandala-pattern fixed inset-0 pointer-events-none opacity-[0.03]" />
+            <div className="floral-border fixed top-0 left-0 right-0 pointer-events-none opacity-20" />
+            <div className="floral-border fixed bottom-0 left-0 right-0 pointer-events-none rotate-180 opacity-20" />
             <Header />
-            <main className="flex-grow container mx-auto px-4 py-8">
-              {children}
+            <main className="flex-grow container mx-auto px-4 py-8 relative z-10">
+              <div className="animate-fade-in">
+                {children}
+              </div>
             </main>
             <Toaster />
           </AuthProvider>

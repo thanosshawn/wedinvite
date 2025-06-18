@@ -1,10 +1,10 @@
 import type { Template } from '@/types';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Clock, Tag, Film } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import RemotionPlayer from '@/components/remotion-player';
 
 interface TemplateCardProps {
   template: Template;
@@ -16,18 +16,15 @@ export default function TemplateCard({ template }: TemplateCardProps) {
       <CardHeader className="p-0 relative">
         <Link href={`/templates/${template.id}`} aria-label={`Customize ${template.title}`}>
           <div className="aspect-[16/9] w-full overflow-hidden">
-            <Image
-              src={template.thumbnailUrl || 'https://placehold.co/600x400.png'}
-              alt={template.title}
-              width={600}
-              height={400}
-              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-              data-ai-hint="invitation video still"
+            <RemotionPlayer
+              remotionId={template.remotionId}
+              duration={template.duration}
+              className="w-full h-full"
             />
           </div>
         </Link>
       </CardHeader>
-      <CardContent className="p-4 flex-grow">
+      <CardContent className="p-4">
         <CardTitle className="text-xl font-headline mb-2">
           <Link href={`/templates/${template.id}`} className="hover:text-primary transition-colors">
             {template.title}

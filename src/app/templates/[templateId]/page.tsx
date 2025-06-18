@@ -12,7 +12,14 @@ interface TemplateDetailPageProps {
 }
 
 export default async function TemplateDetailPage({ params }: TemplateDetailPageProps) {
-  const template: Template | null = await getTemplateById(params.templateId);
+  // Ensure params is properly typed and awaited
+  const templateId = params?.templateId;
+  
+  if (!templateId) {
+    notFound();
+  }
+
+  const template: Template | null = await getTemplateById(templateId);
 
   if (!template) {
     notFound();
